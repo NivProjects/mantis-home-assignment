@@ -73,9 +73,133 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 
 
-
+<br/>
 
 3.
 <img width="512" height="37" alt="networkcheck" src="https://github.com/user-attachments/assets/825188ff-96ee-4fbf-8b2e-09297efd34d1" />
 
+yaml files:
+
+App1-deploy:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-deployment
+  namespace: app1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app1
+  template:
+    metadata:
+      labels:
+        app: app1
+    spec:
+      serviceAccountName: app1-sa
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        command: ["/bin/sh", "-c"]
+        args:
+        - echo "Hello from App 1" > /usr/share/nginx/html/index.html && nginx -g "daemon off;"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1-service
+  namespace: app1
+spec:
+  selector:
+    app: app1
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+
+---
+App2-deploy:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app2-deployment
+  namespace: app2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app2
+  template:
+    metadata:
+      labels:
+        app: app2
+    spec:
+      serviceAccountName: app2-sa
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        command: ["/bin/sh", "-c"]
+        args:
+        - echo "Hello from App 2" > /usr/share/nginx/html/index.html && nginx -g "daemon off;"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app2-service
+  namespace: app2
+spec:
+  selector:
+    app: app2
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+App1-policy:
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace-only
+  namespace: app1
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}
+---
+App2-policy:
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace-only
+  namespace: app2
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector: {}
+---
+App1-sa:
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app1-sa
+  namespace: app1
+---
+App2-sa:
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app2-sa
+  namespace: app2
 
