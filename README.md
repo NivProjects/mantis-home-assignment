@@ -80,6 +80,7 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 yaml files:
 
+```yaml
 App1-deploy:
 apiVersion: apps/v1
 kind: Deployment
@@ -202,4 +203,4 @@ kind: ServiceAccount
 metadata:
   name: app2-sa
   namespace: app2
-
+```
