@@ -76,6 +76,7 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 <br/>
 
 3.
+network between namespaces: 
 <img width="512" height="37" alt="networkcheck" src="https://github.com/user-attachments/assets/825188ff-96ee-4fbf-8b2e-09297efd34d1" />
 
 yaml files:
@@ -208,3 +209,16 @@ metadata:
   name: app2-sa
   namespace: app2
 ```
+
+
+4.
+values:
+```yaml
+grafana:
+  service:
+    type: NodePort
+    nodePort: 32000
+```
+
+since i based the architecture on private subnet and cant get access to the ui i cannot get a screenshot from grafana, however this log(using kubectl port-forward) from alert manager is all i need to know that it all work:
+{"labels":{"alertname":"NodeHighCPU","severity":"critical"},"annotations":{"description":"CPU utilization is at 69.09% for more than 1 minute.","summary":"Instance  has high CPU utilization"},"state":"firing",
