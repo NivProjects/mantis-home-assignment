@@ -1,1 +1,74 @@
 <b>Mantis home assignment</b>
+
+1.
+short explantion about design:
+Modular Architecture: I structured the Terraform code using modules to promote code reusability and maintainability. Breaking down the infrastructure into logical units as it is the best practice to ensure that the configuration remains clean as the project grows. Deployed the EC2 within a private network (VPC/Subnet) with NAT gateway for maximum security and demonstration of real organizition that using private network.
+
+terraform apply output will be attach in additional-deliverables file
+
+
+2.
+k8s initialize in the EC2:
+Sudo su -
+dnf install -y containerd 
+
+mkdir -p /etc/containerd
+containerd config default > /etc/containerd/config.toml
+sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+
+systemctl restart containerd
+systemctl enable containerd
+
+Vim /etc/yum.repos.d/kubernetes.repo 
+Insert into the file:
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/v1.30/rpm/repodata/repomd.xml.key
+
+dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes 
+systemctl enable --now kubelet
+
+dnf install -y iproute-tc
+echo 1 > /proc/sys/net/ipv4/ip_forward
+Vim /etc/sysctl.d/k8s.conf 
+Into the file:
+net.bridge.bridge-nf-call-iptables = 1 
+net.bridge.bridge-nf-call-ip6tables = 1
+ net.ipv4.ip_forward 
+
+kubeadm init --pod-network-cidr=192.168.0.0/16
+
+mkdir -p $HOME/.kube
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 chmod 700 get_helm.sh ./get_helm.sh 
+
+helm repo add projectcalico https://docs.tigera.io/calico/charts
+helm repo update
+
+kubectl create namespace tigera-operator
+
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml
+helm install calico projectcalico/tigera-operator --namespace tigera-operator
+
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/cust
+om-resources.yaml
+
+--------------------------------------------------------------------------------------------
+Since this is a single-node cluster, the control plane also serves as the worker node. By default, Kubernetes prevents regular pods from being scheduled on the control plane by applying a taint.
+To allow the pods to run on the only node in the cluster, I completely removed this taint using the following command:
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+
+
+outputs will be attach in additional-deliverables file
+<img width="512" height="139" alt="calico run" src="https://github.com/user-attachments/assets/67797b44-036d-4944-ba6e-325e145abe22" />
+
+
+3.
+
