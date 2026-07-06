@@ -4,7 +4,7 @@
 short explantion about design:
 Modular Architecture: I structured the Terraform code using modules to promote code reusability and maintainability. Breaking down the infrastructure into logical units as it is the best practice to ensure that the configuration remains clean as the project grows. Deployed the EC2 within a private network (VPC/Subnet) with NAT gateway for maximum security and demonstration of real organizition that using private network.
 
-terraform apply output will be attach in additional-deliverables file
+terraform apply output will be attach in terrafrom-apply file
 
 
 2.
