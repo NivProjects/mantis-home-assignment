@@ -1,0 +1,446 @@
+terraform apply -auto-approve
+module.ec2.data.aws_ami.amazon_linux_2023: Reading...
+module.ec2.data.aws_ami.amazon_linux_2023: Read complete after 2s [id=ami-051bfa33df3949860]
+
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+
+Terraform will perform the following actions:
+
+
+  # module.ec2.aws_instance.k8s_node will be created
+  + resource "aws_instance" "k8s_node" {
+      + ami                                  = "ami-051bfa33df3949860"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = (known after apply)
+      + availability_zone                    = (known after apply)
+      + cpu_core_count                       = (known after apply)
+      + cpu_threads_per_core                 = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = "Moveo-EC2Role"
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t3.large"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = "k8s-node-key"
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "k8s-kubeadm-node"
+        }
+      + tags_all                             = {
+          + "Name" = "k8s-kubeadm-node"
+        }
+      + tenancy                              = (known after apply)
+      + user_data                            = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+
+      + capacity_reservation_specification (known after apply)
+
+
+      + cpu_options (known after apply)
+
+
+      + ebs_block_device (known after apply)
+
+
+      + enclave_options (known after apply)
+
+
+      + ephemeral_block_device (known after apply)
+
+
+      + instance_market_options (known after apply)
+
+
+      + maintenance_options (known after apply)
+
+
+      + metadata_options (known after apply)
+
+
+      + network_interface (known after apply)
+
+
+      + private_dns_name_options (known after apply)
+
+
+      + root_block_device {
+          + delete_on_termination = true
+          + device_name           = (known after apply)
+          + encrypted             = (known after apply)
+          + iops                  = (known after apply)
+          + kms_key_id            = (known after apply)
+          + tags_all              = (known after apply)
+          + throughput            = (known after apply)
+          + volume_id             = (known after apply)
+          + volume_size           = 30
+          + volume_type           = "gp3"
+        }
+    }
+
+
+  # module.ec2.aws_key_pair.k8s_key will be created
+  + resource "aws_key_pair" "k8s_key" {
+      + arn             = (known after apply)
+      + fingerprint     = (known after apply)
+      + id              = (known after apply)
+      + key_name        = "k8s-node-key"
+      + key_name_prefix = (known after apply)
+      + key_pair_id     = (known after apply)
+      + key_type        = (known after apply)
+      + public_key      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOXGvGT9SILUXR2K5jPJbTgQTVrQ8S1vU6E6SuP2G7G/Twb7TQC3tB0TA/r5Wg4Xg7c9cntkVrdVQsX7OHLwpn4AqmEqh/wdyLtvmIigPYJIXe40rVK/uFT1GHrwqvEIhJfCVnB+XCjXJb5IGu0F4VC4/b4IEBM/LL72V1XYXS+NoSnZE7E218Juo5C1dzRZncdWFmEEAQd8w3XflLOgwKat+joTx0mdBOH0u7RwzubPfpkPzQiiJFMxewBMS71SYeqGeY7BrekqgTq3HhDLEvHCrOK9cSDFqVZdMULeiK7+YNyOaen9ftHI7PHEttxsJwr62SHD7VWVxeqTUIGCFZ nivbl@Niv-lenovo"
+      + tags_all        = (known after apply)
+    }
+
+
+  # module.ec2.aws_security_group.k8s_sg will be created
+  + resource "aws_security_group" "k8s_sg" {
+      + arn                    = (known after apply)
+      + description            = "Security group for Kubeadm single node cluster"
+      + egress                 = [
+          + {
+              + cidr_blocks      = [
+                  + "0.0.0.0/0",
+                ]
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + id                     = (known after apply)
+      + ingress                = [
+          + {
+              + cidr_blocks      = [
+                  + "176.229.124.196/32",
+                ]
+              + from_port        = 30000
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 32767
+                # (1 unchanged attribute hidden)
+            },
+          + {
+              + cidr_blocks      = [
+                  + "176.229.124.196/32",
+                ]
+              + from_port        = 6443
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "tcp"
+              + security_groups  = []
+              + self             = false
+              + to_port          = 6443
+                # (1 unchanged attribute hidden)
+            },
+          + {
+              + cidr_blocks      = []
+              + from_port        = 0
+              + ipv6_cidr_blocks = []
+              + prefix_list_ids  = []
+              + protocol         = "-1"
+              + security_groups  = []
+              + self             = true
+              + to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ]
+      + name                   = "k8s-cluster-sg"
+      + name_prefix            = (known after apply)
+      + owner_id               = (known after apply)
+      + revoke_rules_on_delete = false
+      + tags                   = {
+          + "Name" = "k8s-sg"
+        }
+      + tags_all               = {
+          + "Name" = "k8s-sg"
+        }
+      + vpc_id                 = (known after apply)
+    }
+
+
+  # module.vpc.aws_eip.nat_eip will be created
+  + resource "aws_eip" "nat_eip" {
+      + allocation_id        = (known after apply)
+      + arn                  = (known after apply)
+      + association_id       = (known after apply)
+      + carrier_ip           = (known after apply)
+      + customer_owned_ip    = (known after apply)
+      + domain               = "vpc"
+      + id                   = (known after apply)
+      + instance             = (known after apply)
+      + ipam_pool_id         = (known after apply)
+      + network_border_group = (known after apply)
+      + network_interface    = (known after apply)
+      + private_dns          = (known after apply)
+      + private_ip           = (known after apply)
+      + ptr_record           = (known after apply)
+      + public_dns           = (known after apply)
+      + public_ip            = (known after apply)
+      + public_ipv4_pool     = (known after apply)
+      + tags                 = {
+          + "Name" = "k8s-nat-eip"
+        }
+      + tags_all             = {
+          + "Name" = "k8s-nat-eip"
+        }
+      + vpc                  = (known after apply)
+    }
+
+
+  # module.vpc.aws_internet_gateway.igw will be created
+  + resource "aws_internet_gateway" "igw" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + tags     = {
+          + "Name" = "k8s-igw"
+        }
+      + tags_all = {
+          + "Name" = "k8s-igw"
+        }
+      + vpc_id   = (known after apply)
+    }
+
+
+  # module.vpc.aws_nat_gateway.nat_gw will be created
+  + resource "aws_nat_gateway" "nat_gw" {
+      + allocation_id                      = (known after apply)
+      + association_id                     = (known after apply)
+      + connectivity_type                  = "public"
+      + id                                 = (known after apply)
+      + network_interface_id               = (known after apply)
+      + private_ip                         = (known after apply)
+      + public_ip                          = (known after apply)
+      + secondary_private_ip_address_count = (known after apply)
+      + secondary_private_ip_addresses     = (known after apply)
+      + subnet_id                          = (known after apply)
+      + tags                               = {
+          + "Name" = "k8s-nat-gw"
+        }
+      + tags_all                           = {
+          + "Name" = "k8s-nat-gw"
+        }
+    }
+
+
+  # module.vpc.aws_route_table.private_rt will be created
+  + resource "aws_route_table" "private_rt" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + nat_gateway_id             = (known after apply)
+                # (11 unchanged attributes hidden)
+            },
+        ]
+      + tags             = {
+          + "Name" = "k8s-private-rt"
+        }
+      + tags_all         = {
+          + "Name" = "k8s-private-rt"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+
+  # module.vpc.aws_route_table.public_rt will be created
+  + resource "aws_route_table" "public_rt" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + route            = [
+          + {
+              + cidr_block                 = "0.0.0.0/0"
+              + gateway_id                 = (known after apply)
+                # (11 unchanged attributes hidden)
+            },
+        ]
+      + tags             = {
+          + "Name" = "k8s-public-rt"
+        }
+      + tags_all         = {
+          + "Name" = "k8s-public-rt"
+        }
+      + vpc_id           = (known after apply)
+    }
+
+
+  # module.vpc.aws_route_table_association.private_assoc will be created
+  + resource "aws_route_table_association" "private_assoc" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+
+  # module.vpc.aws_route_table_association.public_assoc will be created
+  + resource "aws_route_table_association" "public_assoc" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+
+  # module.vpc.aws_subnet.private_subnet will be created
+  + resource "aws_subnet" "private_subnet" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.20.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = false
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "k8s-private-subnet"
+        }
+      + tags_all                                       = {
+          + "Name" = "k8s-private-subnet"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+
+  # module.vpc.aws_subnet.public_subnet will be created
+  + resource "aws_subnet" "public_subnet" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.10.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + tags                                           = {
+          + "Name" = "k8s-public-subnet"
+        }
+      + tags_all                                       = {
+          + "Name" = "k8s-public-subnet"
+        }
+      + vpc_id                                         = (known after apply)
+    }
+
+
+  # module.vpc.aws_vpc.k8s_vpc will be created
+  + resource "aws_vpc" "k8s_vpc" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "10.0.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = true
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + tags                                 = {
+          + "Name" = "k8s-vpc"
+        }
+      + tags_all                             = {
+          + "Name" = "k8s-vpc"
+        }
+    }
+
+
+Plan: 13 to add, 0 to change, 0 to destroy.
+module.ec2.aws_key_pair.k8s_key: Creating...
+module.vpc.aws_vpc.k8s_vpc: Creating...
+module.ec2.aws_key_pair.k8s_key: Creation complete after 1s [id=k8s-node-key]
+module.vpc.aws_vpc.k8s_vpc: Still creating... [00m10s elapsed]
+module.vpc.aws_vpc.k8s_vpc: Creation complete after 13s [id=vpc-0da0a00ba4eeda441]
+module.vpc.aws_internet_gateway.igw: Creating...
+module.vpc.aws_subnet.public_subnet: Creating...
+module.vpc.aws_subnet.private_subnet: Creating...
+module.ec2.aws_security_group.k8s_sg: Creating...
+module.vpc.aws_subnet.private_subnet: Creation complete after 2s [id=subnet-076ba6b9f1d0073cf]
+module.vpc.aws_internet_gateway.igw: Creation complete after 2s [id=igw-0b25bd33d75a46060]
+module.vpc.aws_route_table.public_rt: Creating...
+module.vpc.aws_eip.nat_eip: Creating...
+module.vpc.aws_route_table.public_rt: Creation complete after 2s [id=rtb-005ace63e302d6406]
+module.vpc.aws_eip.nat_eip: Creation complete after 3s [id=eipalloc-0adf344701107a56b]
+module.ec2.aws_security_group.k8s_sg: Creation complete after 5s [id=sg-04a95f7d0f73ffd93]
+module.ec2.aws_instance.k8s_node: Creating...
+module.vpc.aws_subnet.public_subnet: Still creating... [00m10s elapsed]
+module.vpc.aws_subnet.public_subnet: Creation complete after 12s [id=subnet-053ae8735e0aeb7c5]
+module.vpc.aws_route_table_association.public_assoc: Creating...
+module.vpc.aws_nat_gateway.nat_gw: Creating...
+module.vpc.aws_route_table_association.public_assoc: Creation complete after 1s [id=rtbassoc-0450d57fdee713c85]
+module.ec2.aws_instance.k8s_node: Still creating... [00m10s elapsed]
+module.ec2.aws_instance.k8s_node: Creation complete after 15s [id=i-0467f2602542e3d3d]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [00m10s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [00m20s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [00m30s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [00m40s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [00m50s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [01m00s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [01m10s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [01m20s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [01m30s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [01m40s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [01m50s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [02m00s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Still creating... [02m10s elapsed]
+module.vpc.aws_nat_gateway.nat_gw: Creation complete after 2m17s [id=nat-0316d870b376b6779]
+module.vpc.aws_route_table.private_rt: Creating...
+module.vpc.aws_route_table.private_rt: Creation complete after 3s [id=rtb-06b4107e349ac7f62]
+module.vpc.aws_route_table_association.private_assoc: Creating...
+module.vpc.aws_route_table_association.private_assoc: Creation complete after 0s [id=rtbassoc-01ddafebff27a918f]
