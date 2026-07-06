@@ -80,8 +80,8 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 yaml files:
 
-```yaml
 App1-deploy:
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -106,8 +106,7 @@ spec:
         - echo "Hello from App 1" > /usr/share/nginx/html/index.html && nginx -g "daemon off;"
         ports:
         - containerPort: 80
-```
----
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -120,7 +119,7 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 80
-
+```
 
 ---
 App2-deploy:
