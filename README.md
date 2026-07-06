@@ -121,8 +121,8 @@ spec:
     targetPort: 80
 ```
 
----
 App2-deploy:
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -160,9 +160,10 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 80
+```
 
----
 App1-policy:
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -175,8 +176,9 @@ spec:
   ingress:
   - from:
     - podSelector: {}
----
+```
 App2-policy:
+```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -189,15 +191,17 @@ spec:
   ingress:
   - from:
     - podSelector: {}
----
+```
 App1-sa:
+```yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: app1-sa
   namespace: app1
----
+```
 App2-sa:
+```yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
