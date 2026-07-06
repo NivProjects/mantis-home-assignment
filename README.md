@@ -106,7 +106,7 @@ spec:
         - echo "Hello from App 1" > /usr/share/nginx/html/index.html && nginx -g "daemon off;"
         ports:
         - containerPort: 80
-
+---
 apiVersion: v1
 kind: Service
 metadata:
