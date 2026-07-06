@@ -66,9 +66,16 @@ To allow the pods to run on the only node in the cluster, I completely removed t
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 
-outputs will be attach in additional-deliverables file
+<img width="665" height="85" alt="getnodes" src="https://github.com/user-attachments/assets/3f110da2-a995-4766-98d1-2db16cfa48b4" />
+
 <img width="512" height="139" alt="calico run" src="https://github.com/user-attachments/assets/67797b44-036d-4944-ba6e-325e145abe22" />
 
 
+
+
+
+
 3.
+<img width="512" height="37" alt="networkcheck" src="https://github.com/user-attachments/assets/825188ff-96ee-4fbf-8b2e-09297efd34d1" />
+
 
